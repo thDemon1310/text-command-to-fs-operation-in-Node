@@ -17,12 +17,25 @@ const __dirname = path.dirname(__filename);
     await fs.access("command.txt");
     console.log(`The command.txt file allready exists`);
   } catch (err) {
-    console.log(`command.txt not found creating the file`);
+    console.log(`command.txt not found! creating the file`);
     try {
       await fs.writeFile("command.txt", "");
       console.log(`command.txt created sucessfully`);
     } catch (err) {
       console.error(err);
     }
+  }
+})();
+
+// START watching the command.txt file for any changes
+(async () => {
+  const watcher = fs.watch("./command.txt");
+
+  for await (const event of watcher) {
+    if (event.eventType === "change") {
+      // there is some change in the file
+      console.log(`A change was detected in the ${event.filename} file`);
+    }
+    // console.log(`The event in file is:`, event);
   }
 })();
