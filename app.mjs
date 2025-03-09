@@ -27,37 +27,34 @@ const cmdFilePath = path.join(__dirname, "command.txt");
 const fileReader = async () => {
   const cmdFileHandler = await fs.open(cmdFilePath, "r"); // to open the file; here flag "r" means only read the file
   const watcher = fs.watch(cmdFilePath);
-  cmdFileHandler.on("change", async () => {
-    // Detecting  some change in the file
-    console.log(`\nA change was detected in the ${cmdFilePath} file`);
-    // I want to read a file
-
-    //    first I have to open the file => open (id_no.) eg 28 ; id_no:File descriptor
-
-    // get the  size of the command.txt
-    let fileMetaData = await cmdFileHandler.stat();
-    let sizeOfFile = fileMetaData.size;
-
-    // Allocate our buff with size of file
-    const buff = Buffer.alloc(sizeOfFile);
-    // the position at which we want to fill our buffer
-    const offset = 0;
-    // How many bytes we want to read
-    const length = buff.byteLength;
-    // The position that we want to start reading the file from
-    const position = 0;
-
-    //   We always want to read full content (from beginning-end)
-    await cmdFileHandler.read(buff, offset, length, position);
-
-    // DECORDER 01 => meaningful
-    // encorder meaginfull => 01
-    console.log(buff.toString("utf-8"));
-  });
 
   for await (const event of watcher) {
     if (event.eventType === "change") {
-      cmdFileHandler.emit("change");
+      // Detecting  some change in the file
+      console.log(`\nA change was detected in the ${cmdFilePath} file`);
+      // I want to read a file
+
+      //    first I have to open the file => open (id_no.) eg 28 ; id_no:File descriptor
+
+      // get the  size of the command.txt
+      let fileMetaData = await cmdFileHandler.stat();
+      let sizeOfFile = fileMetaData.size;
+
+      // Allocate our buff with size of file
+      const buff = Buffer.alloc(sizeOfFile);
+      // the position at which we want to fill our buffer
+      const offset = 0;
+      // How many bytes we want to read
+      const length = buff.byteLength;
+      // The position that we want to start reading the file from
+      const position = 0;
+
+      //   We always want to read full content (from beginning-end)
+      await cmdFileHandler.read(buff, offset, length, position);
+
+      // DECORDER 01 => meaningful
+      // encorder meaginfull => 01
+      console.log(buff.toString("utf-8"));
     }
   }
 };
