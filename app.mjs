@@ -55,19 +55,18 @@ const fileReader = async () => {
       // DECORDER 01 => meaningful
       // encorder meaginfull => 01
       let command = buff.toString("utf-8");
-      // command = command.toLowerCase(); // this program is creating the problem in file path
       console.log(`${command}`);
 
       // creat a file:
       // creat a file <path>
       const creatFile = async () => {
         const cmdMatch = /^create a file ([\S]+) of name ([\S]+)$/i; // Regex to match "create a file <path>" i: case insencitive
-
+        //
         let cmdVerification = command.match(cmdMatch); // this will return an object
         
         if (cmdVerification) {
           console.log(`Command verification sucessful`);
-          let dirPath = cmdVerification[1].trim();
+          let dirPath = cmdVerification[1].trim(); // I no file path is passed into it then it is passing null to cmdMatch
           let fileName = cmdVerification[2].trim();
           const FilePath = path.join(dirPath, fileName);
           console.log(dirPath,fileName,FilePath);
