@@ -31,7 +31,7 @@ const fileReader = async () => {
   for await (const event of watcher) {
     if (event.eventType === "change") {
       // Detecting  some change in the file
-      console.log(`\nA change was detected in the ${cmdFilePath} file`);
+      console.log(`\nA change was detected in the file`);
       // I want to read a file
 
       //    first I have to open the file => open (id_no.) eg 28 ; id_no:File descriptor
@@ -54,7 +54,28 @@ const fileReader = async () => {
 
       // DECORDER 01 => meaningful
       // encorder meaginfull => 01
-      console.log(buff.toString("utf-8"));
+      let command = buff.toString("utf-8");
+      command = command.toLowerCase();
+      console.log(`${command}`);
+
+      // creat a file:
+      // creat a file <path>
+      const creatFile = async () => {
+        const cmdMatch = /^create a file ([\S]+) of name ([\S]+)$/i; // Regex to match "create a file <path>"
+
+        let cmdVerification = command.match(cmdMatch); // this will return an object
+
+        if (cmdVerification) {
+          console.log(`Command verification sucessful`);
+
+          console.log(`Creating the file sir`);
+          let dirPath = cmdVerification[1].trim();
+          let fileName = cmdVerification[2].trim();
+          const FilePath = path.join(dirPath, fileName);
+        }
+      };
+
+      creatFile();
     }
   }
 };
