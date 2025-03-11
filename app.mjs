@@ -55,7 +55,7 @@ const fileReader = async () => {
       // DECORDER 01 => meaningful
       // encorder meaginfull => 01
       let command = buff.toString("utf-8");
-      command = command.toLowerCase();
+      command = command.toLowerCase(); // this program is creating the problem in file path
       console.log(`${command}`);
 
       // creat a file:
@@ -67,14 +67,24 @@ const fileReader = async () => {
 
         if (cmdVerification) {
           console.log(`Command verification sucessful`);
-
-          console.log(`Creating the file sir`);
           let dirPath = cmdVerification[1].trim();
           let fileName = cmdVerification[2].trim();
           const FilePath = path.join(dirPath, fileName);
+          try {
+            console.log(`Checking If the file exists!!`);
+            await fs.access(FilePath);
+            console.log(`The file is already present`);
+          } catch (err) {
+            try {
+              console.log(`File not found Creating the file`);
+              await fs.writeFile(FilePath, "");
+              console.log(`File created succesfully`);
+            } catch (error) {
+              console.error(error);
+            }
+          }
         }
       };
-
       creatFile();
     }
   }
