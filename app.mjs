@@ -61,13 +61,13 @@ const fileReader = async () => {
       // creat a file:
       // creat a file <path>
       const creatFile = async () => {
-        const cmdMatch = /^create a file ([\S]+) of name ([\S]+)$/i; // Regex to match "create a file <path>"
+        const cmdMatch = /^create a file(?: ([\S]+))? of name ([\S]+)$/i; // Regex to match "create a file <path>"
 
         let cmdVerification = command.match(cmdMatch); // this will return an object
 
         if (cmdVerification) {
           console.log(`Command verification sucessful`);
-          let dirPath = cmdVerification[1].trim();
+          let dirPath = cmdVerification[1] ? cmdVerification[1].trim() : __dirname;
           let fileName = cmdVerification[2].trim();
           const FilePath = path.join(dirPath, fileName);
           try {
