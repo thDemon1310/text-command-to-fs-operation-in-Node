@@ -56,12 +56,11 @@ const fileReader = async () => {
       // encorder meaginfull => 01
       let command = buff.toString("utf-8");
       console.log(`${command}`);
-      let cmdArr = command.split(";");
-      console.log(cmdArr);
+      let cmdArr = command.split("\n"); // spliting at (";") sucked therefore split at \n
 
       // creat a file:
       // creat a file <path>
-      const creatFile = async () => {
+      const creatFile = async (cmd) => {
         const cmdMatch = /^create a file(?: at)? ([\S]*) of name ([\S]+)$/i; // Regex to match "create a file <path>" i: case insencitive
         // the above regex will ([\S]*) → Allows an empty path (matches "" or a valid path)
         let cmdVerification = command.match(cmdMatch); // this will return an object
@@ -91,10 +90,12 @@ const fileReader = async () => {
           }
         }
       };
+      // multiple line cmd in command.txt
       cmdArr.forEach(async (element) => {
-        console.table([element]);
-        command = element.trim();
-        await creatFile();
+        command = element.trim()
+        if (command) { // ignore empty line
+          await creatFile(command)
+        }
       });
     }
   }
