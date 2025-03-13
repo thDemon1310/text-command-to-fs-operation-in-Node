@@ -56,6 +56,8 @@ const fileReader = async () => {
       // encorder meaginfull => 01
       let command = buff.toString("utf-8");
       console.log(`${command}`);
+      let cmdArr = command.split(";");
+      console.log(cmdArr);
 
       // creat a file:
       // creat a file <path>
@@ -89,7 +91,11 @@ const fileReader = async () => {
           }
         }
       };
-      creatFile();
+      cmdArr.forEach(async (element) => {
+        console.table([element]);
+        command = element.trim();
+        await creatFile();
+      });
     }
   }
 };
