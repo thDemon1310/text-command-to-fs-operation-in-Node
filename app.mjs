@@ -58,45 +58,44 @@ const fileReader = async () => {
       console.log(`${command}`);
       let cmdArr = command.split("\n"); // spliting at (";") sucked therefore split at \n
 
-      // creat a file:
-      // creat a file <path>
-      const creatFile = async (cmd) => {
-        const cmdMatch = /^create a file(?: at)? ([\S]*) of name ([\S]+)$/i; // Regex to match "create a file <path>" i: case insencitive
-        // the above regex will ([\S]*) → Allows an empty path (matches "" or a valid path)
-        let cmdVerification = command.match(cmdMatch); // this will return an object
-        // above I can use command.include("creat a file")
-
-        if (cmdVerification) {
-          console.log(`Command verification sucessful`);
-          let dirPath = cmdVerification[1]
-            ? cmdVerification[1].trim()
-            : __dirname; // after changeing the regex if path is not valid then ./ will be default path
-          let fileName = cmdVerification[2].trim();
-          const FilePath = path.join(dirPath, fileName);
-          // console.log(dirPath, fileName, FilePath);
-
-          try {
-            console.log(`Checking If the file exists!!`);
-            await fs.access(FilePath);
-            console.log(`The file is already present`);
-          } catch (err) {
-            try {
-              console.log(`File not found Creating the file`);
-              await fs.writeFile(FilePath, "");
-              console.log(`File created succesfully`);
-            } catch (error) {
-              console.error(error);
-            }
-          }
-        }
-      };
       // multiple line cmd in command.txt
       cmdArr.forEach(async (element) => {
-        command = element.trim()
-        if (command) { // ignore empty line
-          await creatFile(command)
+        command = element.trim();
+        if (command) {
+          // ignore empty line
+          await creatFile(command);
         }
       });
+    }
+  }
+};
+// creat a file:
+// creat a file <path>
+const creatFile = async (cmd) => {
+  const cmdMatch = /^create a file(?: at)? ([\S]*) of name ([\S]+)$/i; // Regex to match "create a file <path>" i: case insencitive
+  // the above regex will ([\S]*) → Allows an empty path (matches "" or a valid path)
+  let cmdVerification = cmd.match(cmdMatch); // this will return an object
+  // above I can use command.include("creat a file")
+
+  if (cmdVerification) {
+    console.log(`Command verification sucessful`);
+    let dirPath = cmdVerification[1] ? cmdVerification[1].trim() : __dirname; // after changeing the regex if path is not valid then ./ will be default path
+    let fileName = cmdVerification[2].trim();
+    const FilePath = path.join(dirPath, fileName);
+    // console.log(dirPath, fileName, FilePath);
+
+    try {
+      console.log(`Checking If the file exists!!`);
+      await fs.access(FilePath);
+      console.log(`The file is already present`);
+    } catch (err) {
+      try {
+        console.log(`File not found Creating the file`);
+        await fs.writeFile(FilePath, "");
+        console.log(`File created succesfully`);
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 };
