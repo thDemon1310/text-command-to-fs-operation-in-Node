@@ -59,14 +59,14 @@ const fileReader = async () => {
       let cmdArr = command.split("\n"); // spliting at (";") sucked therefore split at \n
 
       // multiple line cmd in command.txt
-      cmdArr.forEach(async (element) => {
+      for (const element of cmdArr) {  // detect a problem with forEach: it does not wait for async functions.
         command = element.trim();
         if (command) {
           // ignore empty line
           await CreatFile(command);
           await DeleteFile(command);
         }
-      });
+      }
     }
   }
 };
@@ -104,13 +104,12 @@ const CreatFile = async (cmd) => {
 
 // delete this_filename form <path>
 const DeleteFile = async (cmd) => {
-  const cmdMatch = /^delete ([\S]+)(?: from ([\S]*))?$/i;
+  const cmdMatch = /^delete ([\S]+)(?: from ([\S+]*))?$/i;
   let cmdVerification = cmd.match(cmdMatch);
   if (cmdVerification) {
     console.log(`Delete command varification sucessfull`);
     let fileName = cmdVerification[1].trim();
     let dirPath = cmdVerification[2] ? cmdVerification[2].trim() : __dirname;
-    console.log(`${dirPath}`);
 
     const FilePath = path.join(dirPath, fileName);
 
