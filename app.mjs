@@ -63,29 +63,31 @@ const fileReader = async () => {
         command = element.trim();
         if (command) {
           // ignore empty line
-          await creatFile(command);
+          await CreatFile(command);
+          await DeleteFile(command);
         }
       });
     }
   }
 };
+
 // creat a file:
 // creat a file <path>
-const creatFile = async (cmd) => {
+const CreatFile = async (cmd) => {
   const cmdMatch = /^create a file(?: at)? ([\S]*) of name ([\S]+)$/i; // Regex to match "create a file <path>" i: case insencitive
   // the above regex will ([\S]*) → Allows an empty path (matches "" or a valid path)
   let cmdVerification = cmd.match(cmdMatch); // this will return an object
   // above I can use command.include("creat a file")
 
   if (cmdVerification) {
-    console.log(`Command verification sucessful`);
+    console.log(`Create Command verification sucessful`);
     let dirPath = cmdVerification[1] ? cmdVerification[1].trim() : __dirname; // after changeing the regex if path is not valid then ./ will be default path
     let fileName = cmdVerification[2].trim();
     const FilePath = path.join(dirPath, fileName);
     // console.log(dirPath, fileName, FilePath);
 
     try {
-      console.log(`Checking If the file exists!!`);
+      console.log(`Checking If the file exists??`);
       await fs.access(FilePath);
       console.log(`The file is already present`);
     } catch (err) {
@@ -96,6 +98,31 @@ const creatFile = async (cmd) => {
       } catch (error) {
         console.error(error);
       }
+    }
+  }
+};
+
+// delete this_filename form <path>
+const DeleteFile = async (cmd) => {
+  const cmdMatch = /^delete ([\S]+)(?: from ([\S]*))?$/i;
+  let cmdVerification = cmd.match(cmdMatch);
+  if (cmdVerification) {
+    console.log(`Delete command varification sucessfull`);
+    let fileName = cmdVerification[1].trim();
+    let dirPath = cmdVerification[2] ? cmdVerification[2].trim() : __dirname;
+    console.log(`${dirPath}`);
+
+    const FilePath = path.join(dirPath, fileName);
+
+    try {
+      console.log(`Checking if file exists??`);
+      await fs.access(FilePath);
+      console.log(`Found the file`);
+      await fs.rm(FilePath);
+      console.log(`File deleted sucessfully`);
+    } catch (error) {
+      console.error(error);
+      console.log(`File not found`);
     }
   }
 };
