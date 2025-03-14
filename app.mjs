@@ -130,27 +130,34 @@ const DeleteFile = async (cmd) => {
 
 // Append the file (write in the file_name on location:"content")
 const AppendFile = async (cmd) => {
-  const cmdMatch = /^append to ([\S]+)(?: from ([\S+]*))?:"(.+)"$/i;
+  const cmdMatch = /^append to ([\S]+)(?: on ([\S]*))?:"(.+)"$/i;
   let cmdVerification = cmd.match(cmdMatch);
 
   if (cmdVerification) {
-    console.log(`\nAppend command varificcation sucessfull`);
+    console.log(`\nAppend command verification successful`);
 
     let fileName = cmdVerification[1].trim();
     let dirPath = cmdVerification[2] ? cmdVerification[2].trim() : __dirname;
     let content = cmdVerification[3];
 
     const FilePath = path.join(dirPath, fileName);
+    
     try {
       console.log(`Checking if file exists?`);
       await fs.access(FilePath);
       console.log(`File is present`);
-      await fs.appendFile(FilePath, content);
-      console.log("File appended sucessfully");
     } catch (error) {
-      console.log(`File is not present`, `\ntherefore,creating and appending`);
-      await fs.appendFile(FilePath, content);
-      console.log("File created and appended sucessfully");
+      console.log(`File is not present, creating and appending`);
+    }
+    
+    try {
+      await fs.appendFile(FilePath, content + "\n");
+      console.log("Content appended successfully");
+    } catch (error) {
+      console.error("Error appending content:", error);
     }
   }
 };
+
+
+
