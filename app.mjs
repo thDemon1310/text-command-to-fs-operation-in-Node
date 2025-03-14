@@ -72,7 +72,7 @@ const fileReader = async () => {
     }
   }
 };
-
+await cmdFileHandler.close();
 // creat a file:
 // creat a file <path>
 const CreatFile = async (cmd) => {
