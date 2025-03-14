@@ -59,12 +59,14 @@ const fileReader = async () => {
       let cmdArr = command.split("\n"); // spliting at (";") sucked therefore split at \n
 
       // multiple line cmd in command.txt
-      for (const element of cmdArr) {  // detect a problem with forEach: it does not wait for async functions.
+      for (const element of cmdArr) {
+        // detect a problem with forEach: it does not wait for async functions.
         command = element.trim();
         if (command) {
           // ignore empty line
           await CreatFile(command);
           await DeleteFile(command);
+          await AppendFile(command);
         }
       }
     }
@@ -80,7 +82,7 @@ const CreatFile = async (cmd) => {
   // above I can use command.include("creat a file")
 
   if (cmdVerification) {
-    console.log(`Create Command verification sucessful`);
+    console.log(`\nCreate Command verification sucessful`);
     let dirPath = cmdVerification[1] ? cmdVerification[1].trim() : __dirname; // after changeing the regex if path is not valid then ./ will be default path
     let fileName = cmdVerification[2].trim();
     const FilePath = path.join(dirPath, fileName);
@@ -107,7 +109,7 @@ const DeleteFile = async (cmd) => {
   const cmdMatch = /^delete ([\S]+)(?: from ([\S+]*))?$/i;
   let cmdVerification = cmd.match(cmdMatch);
   if (cmdVerification) {
-    console.log(`Delete command varification sucessfull`);
+    console.log(`\nDelete command varification sucessfull`);
     let fileName = cmdVerification[1].trim();
     let dirPath = cmdVerification[2] ? cmdVerification[2].trim() : __dirname;
 
@@ -122,6 +124,33 @@ const DeleteFile = async (cmd) => {
     } catch (error) {
       console.error(error);
       console.log(`File not found`);
+    }
+  }
+};
+
+// Append the file (write in the file_name on location:"content")
+const AppendFile = async (cmd) => {
+  const cmdMatch = /^append to ([\S]+)(?: from ([\S+]*))?:"(.+)"$/i;
+  let cmdVerification = cmd.match(cmdMatch);
+
+  if (cmdVerification) {
+    console.log(`\nAppend command varificcation sucessfull`);
+
+    let fileName = cmdVerification[1].trim();
+    let dirPath = cmdVerification[2] ? cmdVerification[2].trim() : __dirname;
+    let content = cmdVerification[3];
+
+    const FilePath = path.join(dirPath, fileName);
+    try {
+      console.log(`Checking if file exists?`);
+      await fs.access(FilePath);
+      console.log(`File is present`);
+      await fs.appendFile(FilePath, content);
+      console.log("File appended sucessfully");
+    } catch (error) {
+      console.log(`File is not present`, `\ntherefore,creating and appending`);
+      await fs.appendFile(FilePath, content);
+      console.log("File created and appended sucessfully");
     }
   }
 };
