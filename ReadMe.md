@@ -14,22 +14,22 @@ Based on the content written in that file, **filesystem (fs) operations** will b
 
 ## Command Syntax  
 
-# Create a File
+### Create a File
 create a file at <path> of name <filename>
 
-# Example:
+#### Example:
 create a file at ./test_dir of name myfile.txt
 
 
-# Delete a File
+### Delete a File
 delete <filename> from <path>
 
-# Example:
+#### Example:
 delete myfile.txt from ./test_dir
 
 
-# Append Content to a File
+### Append Content to a File
 append to <filename> on <path>:"<content>"
 
-# Example:
+#### Example:
 append to myfile.txt on ./test_dir:"Hello, this is a test message" 
