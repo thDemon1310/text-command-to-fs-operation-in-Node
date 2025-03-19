@@ -56,7 +56,7 @@ const fileReader = async () => {
       // encorder meaginfull => 01
       let command = buff.toString("utf-8");
       console.log(`${command}`);
-      await cmdFileHandler.close();
+      // await cmdFileHandler.close();
       let cmdArr = command.split("\n"); // spliting at (";") sucked therefore split at \n
 
       // multiple line cmd in command.txt
