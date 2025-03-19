@@ -56,6 +56,7 @@ const fileReader = async () => {
       // encorder meaginfull => 01
       let command = buff.toString("utf-8");
       console.log(`${command}`);
+      await cmdFileHandler.close();
       let cmdArr = command.split("\n"); // spliting at (";") sucked therefore split at \n
 
       // multiple line cmd in command.txt
@@ -72,12 +73,12 @@ const fileReader = async () => {
     }
   }
 };
-await cmdFileHandler.close();
+
 // creat a file:
 // creat a file <path>
 const CreatFile = async (cmd) => {
   const cmdMatch = /^create a file(?: at)? ([\S]*) of name ([\S]+)$/i; // Regex to match "create a file <path>" i: case insencitive
-  // the above regex will ([\S]*) → Allows an empty path (matches "" or a valid path)
+  // the above r  await cmdFileHandler.close();egex will ([\S]*) → Allows an empty path (matches "" or a valid path)
   let cmdVerification = cmd.match(cmdMatch); // this will return an object
   // above I can use command.include("creat a file")
 
@@ -141,7 +142,7 @@ const AppendFile = async (cmd) => {
     let content = cmdVerification[3];
 
     const FilePath = path.join(dirPath, fileName);
-    
+
     try {
       console.log(`Checking if file exists?`);
       await fs.access(FilePath);
@@ -149,7 +150,7 @@ const AppendFile = async (cmd) => {
     } catch (error) {
       console.log(`File is not present, creating and appending`);
     }
-    
+
     try {
       await fs.appendFile(FilePath, content + "\n");
       console.log("Content appended successfully");
@@ -158,6 +159,3 @@ const AppendFile = async (cmd) => {
     }
   }
 };
-
-
-
