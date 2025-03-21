@@ -65,9 +65,23 @@ const fileReader = async () => {
         command = element.trim();
         if (command) {
           // ignore empty line
-          await CreatFile(command);
-          await DeleteFile(command);
-          await AppendFile(command);
+          const createCmd = command.includes("create a file");
+          const deleteCmd = command.includes("delete");
+          const appendCmd = command.includes("append");
+          if (createCmd) {
+            await CreatFile(command);
+          } else if (deleteCmd) {
+            await DeleteFile(command);
+          } else if (appendCmd) {
+            await AppendFile(command);
+          } else {
+            console.log(
+              `Your command didn't include: create, delete or append`
+            );
+          }
+        }else{
+          console.log(`The command.txt has no command`);
+          
         }
       }
     }
