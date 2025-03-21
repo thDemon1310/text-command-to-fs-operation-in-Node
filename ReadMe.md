@@ -11,25 +11,43 @@ Based on the content written in that file, **filesystem (fs) operations** will b
   - Creating a file  
   - Deleting a file  
   - Appending content to a file  
+  - Renaming a file  
 
 ## Command Syntax  
 
-### Create a File
+### Create a File  
+```plaintext
 create a file at <path> of name <filename>
-
-#### Example:
+```
+#### Example:  
+```plaintext
 create a file at ./test_dir of name myfile.txt
+```
 
-
-### Delete a File
+### Delete a File  
+```plaintext
 delete <filename> from <path>
-
-#### Example:
+```
+#### Example:  
+```plaintext
 delete myfile.txt from ./test_dir
+```
 
-
-### Append Content to a File
+### Append Content to a File  
+```plaintext
 append <filename> on <path>:"<content>"
+```
+#### Example:  
+```plaintext
+append myfile.txt on ./test_dir:"Hello, this is a test message"
+```
 
-#### Example:
-append myfile.txt on ./test_dir:"Hello, this is a test message" 
+### Rename a File  
+```plaintext
+rename the file <old-name> to <new-name> on <path>
+```
+#### Example:  
+```plaintext
+rename the file oldfile.txt to newfile.txt on ./test_dir
+```
+
