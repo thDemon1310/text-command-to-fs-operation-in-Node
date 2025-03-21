@@ -68,20 +68,22 @@ const fileReader = async () => {
           const createCmd = command.includes("create a file");
           const deleteCmd = command.includes("delete");
           const appendCmd = command.includes("append");
+          const renameCmd = command.includes("rename");
           if (createCmd) {
             await CreatFile(command);
           } else if (deleteCmd) {
             await DeleteFile(command);
           } else if (appendCmd) {
             await AppendFile(command);
+          } else if (renameCmd) {
+            await RenameFile(command);
           } else {
             console.log(
-              `Your command didn't include: create, delete or append`
+              `Your command didn't include: create, delete, append or rename`
             );
           }
-        }else{
+        } else {
           console.log(`The command.txt has no command`);
-          
         }
       }
     }
@@ -145,7 +147,7 @@ const DeleteFile = async (cmd) => {
 
 // Append the file (write in the file_name on location:"content")
 const AppendFile = async (cmd) => {
-  const cmdMatch = /^append to ([\S]+)(?: on ([\S]*))?:"(.+)"$/i;
+  const cmdMatch = /^append ([\S]+)(?: on ([\S]*))?:"(.+)"$/i;
   let cmdVerification = cmd.match(cmdMatch);
 
   if (cmdVerification) {
@@ -170,6 +172,40 @@ const AppendFile = async (cmd) => {
       console.log("Content appended successfully");
     } catch (error) {
       console.error("Error appending content:", error);
+    }
+  }
+};
+
+// Rename the file <old-name> to <new-name> on <path>
+const RenameFile = async (cmd) => {
+  const cmdMatch = /^rename the file ([^\s]+) to ([^\s]+)(?: on ([^\s]+))?$/i;
+  let cmdVerification = cmd.match(cmdMatch);
+
+  if (cmdVerification) {
+    console.log(`\nrename command varification sucessfull`);
+
+    let oldFileName = cmdVerification[1].trim();
+    let newFileName = cmdVerification[2].trim();
+    let dirPath = cmdVerification[3] ? cmdVerification[3].trim() : __dirname;
+
+    const oldPath = path.join(dirPath, oldFileName);
+    const newPath = path.join(dirPath, newFileName);
+
+    // check if old file exiest?
+    try {
+      console.log(`checking if ${oldFileName} file exiest?`);
+      await fs.access(oldPath);
+      console.log(`file is present`);
+      try {
+        console.log(`Renaming ${oldFileName} to ${newFileName}`);
+        await fs.rename(oldPath, newPath);
+        console.log(`File renamimed sucessfully`);
+      } catch (err) {
+        console.error(err);
+      }
+    } catch (error) {
+      console.error(error);
+      console.log(`File is not presnet`);
     }
   }
 };

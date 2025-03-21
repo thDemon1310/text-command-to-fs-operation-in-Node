@@ -29,7 +29,7 @@ delete myfile.txt from ./test_dir
 
 
 ### Append Content to a File
-append to <filename> on <path>:"<content>"
+append <filename> on <path>:"<content>"
 
 #### Example:
-append to myfile.txt on ./test_dir:"Hello, this is a test message" 
+append myfile.txt on ./test_dir:"Hello, this is a test message" 
